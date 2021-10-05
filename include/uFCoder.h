@@ -1,10 +1,10 @@
 /*
  * uFCoder.h
  *
- * library version: 5.0.54
+ * library version: 5.0.55
  *
  * Created on:  2009-01-14
- * Last edited: 2021-07-30
+ * Last edited: 2021-10-5
  *
  * Author: D-Logic
  */
@@ -793,6 +793,11 @@ typedef enum E_PCD_MGR_STATES
 	PCD_MGR_CE_COMBO_IN_FIELD
 }pcd_states_t;
 
+enum E_RGB_PORT_NAMES
+{
+	EXTERNAL_RGB_PORT,
+	INTERNAL_RGB_PORT
+};
 
 #ifdef __cplusplus
 extern "C"
@@ -1303,6 +1308,7 @@ UFR_STATUS DL_API UfrXrcRelayState(uint8_t state);
 UFR_STATUS DL_API UfrXrcGetIoState(VAR uint8_t *intercom, VAR uint8_t *door, VAR uint8_t *relay_state);
 UFR_STATUS DL_API UfrRedLightControl(uint8_t light_status);
 UFR_STATUS DL_API UfrRgbLightControl(uint8_t red, uint8_t green, uint8_t blue, uint8_t intensity, uint8_t enable);
+UFR_STATUS DL_API RgbControl(uint8_t red, uint8_t green, uint8_t blue);
 UFR_STATUS DL_API UfrRgbExtLightControl(uint8_t enable);
 
 UFR_STATUS DL_API UfrSetBadSelectCardNrMax(uint8_t bad_select_nr_max);
@@ -1316,9 +1322,12 @@ UFR_STATUS DL_API AutoSleepGet(VAR uint8_t *seconds_wait);
 UFR_STATUS DL_API SetSpeedPermanently(unsigned char tx_speed, unsigned char rx_speed);
 UFR_STATUS DL_API GetSpeedParameters(VAR unsigned char *tx_speed, VAR unsigned char *rx_speed);
 UFR_STATUS DL_API SetDisplayData(IN uint8_t *display_data, uint8_t data_length);
+UFR_STATUS DL_API SetRgbData(IN uint8_t *display_data, uint8_t data_length, uint8_t port_name);
 UFR_STATUS DL_API SetSpeakerFrequency(uint16_t frequency);
 UFR_STATUS DL_API SetDisplayIntensity(uint8_t intensity);
 UFR_STATUS DL_API GetDisplayIntensity(VAR uint8_t *intensity);
+UFR_STATUS DL_API SetRgbIntensity(uint8_t intensity);
+UFR_STATUS DL_API GetRgbIntensity(VAR uint8_t *intensity);
 // DESFIRE functions **************************************************************
 
 /**
@@ -3897,6 +3906,8 @@ UFR_STATUS DL_API UfrRedLightControlM(UFR_HANDLE hndUFR, uint8_t light_status);
 
 UFR_STATUS DL_API UfrRgbLightControlM(UFR_HANDLE hndUFR, uint8_t red, uint8_t green, uint8_t blue, uint8_t intensity, uint8_t enable);
 
+UFR_STATUS DL_API RgbControlM(UFR_HANDLE hndUFR, uint8_t red, uint8_t green, uint8_t blue);
+
 UFR_STATUS DL_API UfrRgbExtLightControlM(UFR_HANDLE hndUFR, uint8_t enable);
 
 UFR_STATUS DL_API UfrSetBadSelectCardNrMaxM(UFR_HANDLE hndUFR, uint8_t bad_select_nr_max);
@@ -3916,6 +3927,8 @@ UFR_STATUS DL_API SetSpeedPermanentlyM(UFR_HANDLE hndUFR, unsigned char tx_speed
 UFR_STATUS DL_API GetSpeedParametersM(UFR_HANDLE hndUFR, VAR unsigned char *tx_speed, VAR unsigned char *rx_speed);
 
 UFR_STATUS DL_API SetDisplayDataM(UFR_HANDLE hndUFR, IN uint8_t *display_data, uint8_t data_length);
+
+UFR_STATUS DL_API SetRgbDataM(UFR_HANDLE hndUFR, uint8_t *display_data, uint8_t data_length, uint8_t port_name);
 
 UFR_STATUS DL_API SetSpeakerFrequencyM(UFR_HANDLE hndUFR, uint16_t frequency);
 
@@ -6055,7 +6068,7 @@ UFR_STATUS DL_API EspSetReaderTime(IN uint8_t *password, IN uint8_t *time);
 UFR_STATUS DL_API EspSetIOState(uint8_t pin, uint8_t state);
 UFR_STATUS DL_API EspGetIOState(OUT uint8_t *state);
 UFR_STATUS DL_API EspSetTransparentReader(uint8_t reader);
-UFR_STATUS DL_API EspGetReaderSerialNumber(uint32_t *SerialNumber);
+UFR_STATUS DL_API EspGetReaderSerialNumber(VAR uint32_t *SerialNumber);
 
 //NDEF MESSAGES
 //----------------------------------------------------------
