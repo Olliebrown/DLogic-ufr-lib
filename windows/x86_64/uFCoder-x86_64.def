@@ -401,10 +401,10 @@ EXPORTS
     ReadNdefRecord_AddressM @400
     ReadNdefRecord_AndroidApp @401
     ReadNdefRecord_AndroidAppM @402
-    ReadNdefRecord_Bitcoin @403
-    ReadNdefRecord_BitcoinM @404
-    ReadNdefRecord_Bluetooth @405
-    ReadNdefRecord_BluetoothM @406
+    ReadNdefRecord_BT @403
+    ReadNdefRecord_BTM @404
+    ReadNdefRecord_Bitcoin @405
+    ReadNdefRecord_BitcoinM @406
     ReadNdefRecord_Contact @407
     ReadNdefRecord_ContactM @408
     ReadNdefRecord_Email @409
@@ -703,10 +703,10 @@ EXPORTS
     WriteNdefRecord_AddressM @702
     WriteNdefRecord_AndroidApp @703
     WriteNdefRecord_AndroidAppM @704
-    WriteNdefRecord_Bitcoin @705
-    WriteNdefRecord_BitcoinM @706
-    WriteNdefRecord_Bluetooth @707
-    WriteNdefRecord_BluetoothM @708
+    WriteNdefRecord_BT @705
+    WriteNdefRecord_BTM @706
+    WriteNdefRecord_Bitcoin @707
+    WriteNdefRecord_BitcoinM @708
     WriteNdefRecord_Contact @709
     WriteNdefRecord_ContactM @710
     WriteNdefRecord_Email @711

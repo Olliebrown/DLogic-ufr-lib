@@ -6103,7 +6103,7 @@ enum WIFI_ENC_TYPE {
 
 UFR_STATUS DL_API WriteNdefRecord_WiFi(uint8_t ndef_storage, IN const char *ssid, uint8_t auth_type, uint8_t encryption_type,
                                        IN const char *password);
-UFR_STATUS DL_API WriteNdefRecord_Bluetooth(uint8_t ndef_storage, IN const char *bt_mac_address);
+UFR_STATUS DL_API WriteNdefRecord_BT(uint8_t ndef_storage, IN const char *bt_mac_address);
 UFR_STATUS DL_API WriteNdefRecord_SMS(uint8_t ndef_storage, IN const char *phone_number, IN const char *message);
 UFR_STATUS DL_API WriteNdefRecord_Bitcoin(uint8_t ndef_storage, IN const char *bitcoin_address, IN const char *amount,
                                           IN const char *message);
@@ -6123,7 +6123,7 @@ UFR_STATUS DL_API WriteNdefRecord_Phone(uint8_t ndef_storage, IN const char *pho
 
 UFR_STATUS DL_API WriteNdefRecord_WiFiM(UFR_HANDLE hndUFR, uint8_t ndef_storage, IN const char *ssid, uint8_t auth_type,
                                         uint8_t encryption_type, IN const char *password);
-UFR_STATUS DL_API WriteNdefRecord_BluetoothM(UFR_HANDLE hndUFR, uint8_t ndef_storage, IN const char *bt_mac_address);
+UFR_STATUS DL_API WriteNdefRecord_BTM(UFR_HANDLE hndUFR, uint8_t ndef_storage, IN const char *bt_mac_address);
 UFR_STATUS DL_API WriteNdefRecord_SMSM(UFR_HANDLE hndUFR, uint8_t ndef_storage, IN const char *phone_number, IN const char *message);
 UFR_STATUS DL_API WriteNdefRecord_BitcoinM(UFR_HANDLE hndUFR, uint8_t ndef_storage, IN const char *bitcoin_address, IN const char *amount,
                                            IN const char *message);
@@ -6157,7 +6157,7 @@ UFR_STATUS DL_API ReadNdefRecord_Viber(OUT char *message);
 UFR_STATUS DL_API ReadNdefRecord_Contact(OUT char *vCard);
 UFR_STATUS DL_API ReadNdefRecord_Phone(OUT char *phone_number);
 UFR_STATUS DL_API ReadNdefRecord_SMS(OUT char *phone_number, OUT char *message);
-UFR_STATUS DL_API ReadNdefRecord_Bluetooth(OUT char *bt_mac_address);
+UFR_STATUS DL_API ReadNdefRecord_BT(OUT char *bt_mac_address);
 
 UFR_STATUS DL_API ReadNdefRecord_WiFiM(UFR_HANDLE hndUFR, OUT char *ssid, OUT char *auth_type, OUT char *encryption_type,
                                        OUT char *password);
@@ -6175,7 +6175,7 @@ UFR_STATUS DL_API ReadNdefRecord_ViberM(UFR_HANDLE hndUFR, OUT char *message);
 UFR_STATUS DL_API ReadNdefRecord_ContactM(UFR_HANDLE hndUFR, OUT char *vCard);
 UFR_STATUS DL_API ReadNdefRecord_PhoneM(UFR_HANDLE hndUFR, OUT char *phone_number);
 UFR_STATUS DL_API ReadNdefRecord_SMSM(UFR_HANDLE hndUFR, OUT char *phone_number, OUT char *message);
-UFR_STATUS DL_API ReadNdefRecord_BluetoothM(UFR_HANDLE hndUFR, OUT char *bt_mac_address);
+UFR_STATUS DL_API ReadNdefRecord_BTM(UFR_HANDLE hndUFR, OUT char *bt_mac_address);
 
 c_string DL_API ParseNdefMessage(IN uint8_t *type_record, uint8_t type_len, IN uint8_t *payload, uint32_t payload_len);
 
