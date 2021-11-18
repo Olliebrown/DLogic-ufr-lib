@@ -1,10 +1,10 @@
 /*
  * uFCoder.h
  *
- * library version: 5.0.55
+ * library version: 5.0.57
  *
  * Created on:  2009-01-14
- * Last edited: 2021-10-30
+ * Last edited: 2021-11-17
  *
  * Author: D-Logic
  */
@@ -455,6 +455,17 @@ typedef enum UFCODER_ERROR_CODES {
     UFR_SAM_AUTH_ERROR,
     UFR_SAM_CRYPTO_ERROR,
 
+	// TLS, HTTPS Error Codes:
+	TLS_ERR_OPENING_SOCKET = 0x5000,
+	TLS_ERR_NO_SUCH_HOST,
+	TLS_CONNECTING_ERROR,
+	TLS_ERR_SERVER_UNEXPECTEDLY_CLOSED_CONNECTION,
+	TLS_ERR_UNKNOWN_GIDS_CERTIFICATE_FORMAT,
+	TLS_ERR_SET_PIN_FOR_GIDS_CERT_ONLY,
+	TLS_ERR_GIDS_PIN_CODE_WRONG,
+	TLS_ERR_UNSUPPORTED_CERTIFICATE_TYPE,
+	TLS_ERR_PRIVATE_KEY_CONTEXT_WRONG,
+
     // JC cards APDU Error Codes:
     UFR_APDU_TRANSCEIVE_ERROR = 0xAE,
     UFR_APDU_JC_APP_NOT_SELECTED = 0x6000,
@@ -646,8 +657,17 @@ enum E_PUB_KEY_TYPES {
 
     PUB_KEY_TYPES_NUM
 };
+
+enum E_CERTIFICATE_TYPES {
+	X509_PEM,
+	X509_DER,
+	X509_GIDS_NFC,
+
+	E_CERTIFICATE_TYPES_NUM
+};
+
 enum E_ECC_CURVES {
-    secp112r1,
+/*  secp112r1,
     secp112r2,
     secp128r1,
     secp128r2,
@@ -681,7 +701,7 @@ enum E_ECC_CURVES {
     brainpoolP320t1,
     brainpoolP384t1,
     brainpoolP512t1,
-
+*/
     ECC_CURVES_NUM
 
 /* Not supported in uFCoder library yet:
@@ -1464,6 +1484,10 @@ UFR_STATUS DL_API MRTDGetImageFromDG2ToFile(IN const uint8_t *dg2, uint32_t dg2_
 uint32_t DL_API MRTDGetDgIndex(uint8_t dg_tag);
 UFR_STATUS DL_API MRTDGetDGTagListFromCOM(IN const uint8_t *com, uint32_t com_len, VAR uint8_t **dg_list, VAR uint8_t *dg_list_cnt);
 c_string DL_API MRTDGetDgName(uint8_t dg_tag);
+//==============================================================================
+UFR_STATUS DL_API DL_TLS_SetClientCertificate(uint32_t cert_type, const char *cert, uint32_t cert_len);
+UFR_STATUS DL_API DL_TLS_SetClientX509PrivateKey_PEM(const char *priv_key, uint32_t key_bytes_len);
+UFR_STATUS DL_API DL_TLS_Request(char **read_buffer, uint32_t *received_len, const char *url, const char *resource_path, uint16_t port, char *PIN, uint8_t PIN_len);
 //==============================================================================
 UFR_STATUS DL_API DES_to_AES_key_type(void);
 UFR_STATUS DL_API AES_to_DES_key_type(void);
@@ -6314,8 +6338,8 @@ c_string DL_API GetReaderDescriptionM(UFR_HANDLE hndUFR);
 #ifdef __ANDROID__
 #include <jni.h>
 
-JNIEnv *global_env;
-jclass global_class;
+extern JNIEnv *global_env;
+extern jclass global_class;
 void DL_API initVM(JNIEnv *env, jclass class1);
 #endif
 
