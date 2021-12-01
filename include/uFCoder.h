@@ -677,7 +677,7 @@ enum E_CERTIFICATE_TYPES {
 };
 
 enum E_ECC_CURVES {
-/*  secp112r1,
+    secp112r1,
     secp112r2,
     secp128r1,
     secp128r2,
@@ -711,7 +711,7 @@ enum E_ECC_CURVES {
     brainpoolP320t1,
     brainpoolP384t1,
     brainpoolP512t1,
-*/
+
     ECC_CURVES_NUM
 
 /* Not supported in uFCoder library yet:
