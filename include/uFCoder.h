@@ -677,7 +677,7 @@ enum E_CERTIFICATE_TYPES {
 };
 
 enum E_ECC_CURVES {
-    secp112r1,
+	secp112r1,
     secp112r2,
     secp128r1,
     secp128r2,
