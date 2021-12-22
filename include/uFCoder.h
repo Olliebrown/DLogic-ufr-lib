@@ -1,10 +1,10 @@
 /*
  * uFCoder.h
  *
- * library version: 5.0.57
+ * library version: 5.0.58
  *
  * Created on:  2009-01-14
- * Last edited: 2021-12-10
+ * Last edited: 2021-12-13
  *
  * Author: D-Logic
  */
@@ -1384,6 +1384,7 @@ UFR_STATUS DL_API uFR_APDU_Transceive(uint8_t cls, uint8_t ins, uint8_t p1, uint
 
 UFR_STATUS DL_API APDUHexStrTransceive(IN const char *c_apdu, OUT char **r_apdu);
 UFR_STATUS DL_API APDUPlainTransceive(IN const uint8_t *c_apdu, uint32_t c_apdu_len, OUT uint8_t *r_apdu, VAR uint32_t *r_apdu_len);
+UFR_STATUS DL_API APDUExtPlainTransceive(IN const uint8_t *c_apdu, uint32_t c_apdu_len, VAR uint8_t **r_apdu, VAR uint32_t *r_apdu_len);
 UFR_STATUS DL_API APDUTransceive(uint8_t cls, uint8_t ins, uint8_t p1, uint8_t p2, IN const uint8_t *data_out, uint32_t Nc,
                                  OUT uint8_t *data_in, VAR uint32_t *Ne, uint8_t send_le, OUT uint8_t *apdu_status);
 UFR_STATUS DL_API i_block_trans_rcv_chain(uint8_t chaining, uint8_t timeout, uint8_t block_length, IN uint8_t *snd_data_array,
