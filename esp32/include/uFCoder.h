@@ -1,10 +1,10 @@
 /*
  * uFCoder.h
  *
- * library version: 5.0.55
+ * library version: 5.0.58
  *
  * Created on:  2009-01-14
- * Last edited: 2021-10-5
+ * Last edited: 2022-01-12
  *
  * Author: D-Logic
  */
@@ -84,6 +84,7 @@ typedef void * UFR_HANDLE;
 #define DL_NTAG_413_DNA                 0x11
 #define DL_NTAG_424_DNA                 0x12
 #define DL_NTAG_424_DNA_TT				0x13
+#define DL_NTAG_210U                    0x14
 
 #define DL_MIFARE_MINI					0x20
 #define	DL_MIFARE_CLASSIC_1K			0x21
@@ -455,6 +456,17 @@ typedef enum UFCODER_ERROR_CODES {
     UFR_SAM_AUTH_ERROR,
     UFR_SAM_CRYPTO_ERROR,
 
+	// TLS, HTTPS Error Codes:
+	TLS_ERR_OPENING_SOCKET = 0x5000,
+	TLS_ERR_NO_SUCH_HOST = 0x5001,
+	TLS_CONNECTING_ERROR = 0x5002,
+	TLS_ERR_SERVER_UNEXPECTEDLY_CLOSED_CONNECTION = 0x5003,
+	TLS_ERR_UNKNOWN_GIDS_CERTIFICATE_FORMAT = 0x5004,
+	TLS_ERR_SET_PIN_FOR_GIDS_CERT_ONLY = 0x5005,
+	TLS_ERR_GIDS_PIN_CODE_WRONG = 0x5006,
+	TLS_ERR_UNSUPPORTED_CERTIFICATE_TYPE = 0x5007,
+	TLS_ERR_PRIVATE_KEY_CONTEXT_WRONG = 0x5008,
+
     // JC cards APDU Error Codes:
     UFR_APDU_TRANSCEIVE_ERROR = 0xAE,
     UFR_APDU_JC_APP_NOT_SELECTED = 0x6000,
@@ -551,6 +563,11 @@ typedef enum UFCODER_ERROR_CODES {
     // ISO7816-4 Errors (R-APDU) - 2 SW bytes returned by the card, prefixed with 0x000A:
     UFR_APDU_SW_TAG = 0x000A0000,
     UFR_APDU_SW_OPERATION_IS_FAILED = 0x000A6300,
+	UFR_APDU_SW_WRONG_PIN_4_TRIES_REMAINING = 0x000A63C4,
+	UFR_APDU_SW_WRONG_PIN_3_TRIES_REMAINING = 0x000A63C3,
+	UFR_APDU_SW_WRONG_PIN_2_TRIES_REMAINING = 0x000A63C2,
+	UFR_APDU_SW_WRONG_PIN_1_TRIES_REMAINING = 0x000A63C1,
+	UFR_APDU_SW_WRONG_PIN_0_TRIES_REMAINING = 0x000A63C0,
     UFR_APDU_SW_WRONG_LENGTH = 0x000A6700,
     UFR_APDU_SW_SECURITY_STATUS_NOT_SATISFIED = 0x000A6982,
     UFR_APDU_SW_AUTHENTICATION_METHOD_BLOCKED = 0x000A6983,
@@ -646,8 +663,22 @@ enum E_PUB_KEY_TYPES {
 
     PUB_KEY_TYPES_NUM
 };
+
+enum E_BIT_ENCODINGS {
+	ENCODING_BIN,
+	ENCODING_HEX
+};
+
+enum E_CERTIFICATE_TYPES {
+	X509_PEM,
+	X509_DER,
+	X509_GIDS_NFC,
+
+	E_CERTIFICATE_TYPES_NUM
+};
+
 enum E_ECC_CURVES {
-    secp112r1,
+	secp112r1,
     secp112r2,
     secp128r1,
     secp128r2,
@@ -1354,6 +1385,7 @@ UFR_STATUS DL_API uFR_APDU_Transceive(uint8_t cls, uint8_t ins, uint8_t p1, uint
 
 UFR_STATUS DL_API APDUHexStrTransceive(IN const char *c_apdu, OUT char **r_apdu);
 UFR_STATUS DL_API APDUPlainTransceive(IN const uint8_t *c_apdu, uint32_t c_apdu_len, OUT uint8_t *r_apdu, VAR uint32_t *r_apdu_len);
+UFR_STATUS DL_API APDUPlainTransceiveToHeap(IN const uint8_t *c_apdu, uint32_t c_apdu_len, VAR uint8_t **r_apdu, VAR uint32_t *r_apdu_len);
 UFR_STATUS DL_API APDUTransceive(uint8_t cls, uint8_t ins, uint8_t p1, uint8_t p2, IN const uint8_t *data_out, uint32_t Nc,
                                  OUT uint8_t *data_in, VAR uint32_t *Ne, uint8_t send_le, OUT uint8_t *apdu_status);
 UFR_STATUS DL_API i_block_trans_rcv_chain(uint8_t chaining, uint8_t timeout, uint8_t block_length, IN uint8_t *snd_data_array,
@@ -1464,6 +1496,10 @@ UFR_STATUS DL_API MRTDGetImageFromDG2ToFile(IN const uint8_t *dg2, uint32_t dg2_
 uint32_t DL_API MRTDGetDgIndex(uint8_t dg_tag);
 UFR_STATUS DL_API MRTDGetDGTagListFromCOM(IN const uint8_t *com, uint32_t com_len, VAR uint8_t **dg_list, VAR uint8_t *dg_list_cnt);
 c_string DL_API MRTDGetDgName(uint8_t dg_tag);
+//==============================================================================
+UFR_STATUS DL_API DL_TLS_SetClientCertificate(uint32_t cert_type, const char *cert, uint32_t cert_len);
+UFR_STATUS DL_API DL_TLS_SetClientX509PrivateKey_PEM(const char *priv_key, uint32_t key_bytes_len);
+UFR_STATUS DL_API DL_TLS_Request(char **read_buffer, uint32_t *received_len, const char *url, const char *resource_path, uint16_t port, char *PIN, uint8_t PIN_len);
 //==============================================================================
 UFR_STATUS DL_API DES_to_AES_key_type(void);
 UFR_STATUS DL_API AES_to_DES_key_type(void);
@@ -3957,6 +3993,8 @@ UFR_STATUS DL_API APDUHexStrTransceiveM(UFR_HANDLE hndUFR, IN const char *c_apdu
 UFR_STATUS DL_API APDUPlainTransceiveM(UFR_HANDLE hndUFR, IN const uint8_t *c_apdu, uint32_t c_apdu_len, OUT uint8_t *r_apdu,
                                        VAR uint32_t *r_apdu_len);
 
+UFR_STATUS DL_API APDUPlainTransceiveToHeapM(UFR_HANDLE hndUFR, IN const uint8_t *c_apdu, uint32_t c_apdu_len, VAR uint8_t **r_apdu, VAR uint32_t *r_apdu_len);
+
 UFR_STATUS DL_API APDUTransceiveM(UFR_HANDLE hndUFR, uint8_t cls, uint8_t ins, uint8_t p1, uint8_t p2, IN const uint8_t *data_out,
                                   uint32_t Nc, OUT uint8_t *data_in, VAR uint32_t *Ne, uint8_t send_le, OUT uint8_t *apdu_status);
 
@@ -6068,7 +6106,7 @@ UFR_STATUS DL_API EspSetReaderTime(IN uint8_t *password, IN uint8_t *time);
 UFR_STATUS DL_API EspSetIOState(uint8_t pin, uint8_t state);
 UFR_STATUS DL_API EspGetIOState(OUT uint8_t *state);
 UFR_STATUS DL_API EspSetTransparentReader(uint8_t reader);
-UFR_STATUS DL_API EspGetReaderSerialNumber(uint32_t *SerialNumber);
+UFR_STATUS DL_API EspGetReaderSerialNumber(VAR uint32_t *SerialNumber);
 
 //NDEF MESSAGES
 //----------------------------------------------------------
@@ -6314,8 +6352,8 @@ c_string DL_API GetReaderDescriptionM(UFR_HANDLE hndUFR);
 #ifdef __ANDROID__
 #include <jni.h>
 
-JNIEnv *global_env;
-jclass global_class;
+extern JNIEnv *global_env;
+extern jclass global_class;
 void DL_API initVM(JNIEnv *env, jclass class1);
 #endif
 

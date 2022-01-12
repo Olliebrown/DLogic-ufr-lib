@@ -1,10 +1,10 @@
 /*
  * uFCoder.h
  *
- * library version: 5.0.57
+ * library version: 5.0.58
  *
  * Created on:  2009-01-14
- * Last edited: 2021-12-27
+ * Last edited: 2022-01-12
  *
  * Author: D-Logic
  */
@@ -84,6 +84,7 @@ typedef void * UFR_HANDLE;
 #define DL_NTAG_413_DNA                 0x11
 #define DL_NTAG_424_DNA                 0x12
 #define DL_NTAG_424_DNA_TT				0x13
+#define DL_NTAG_210U                    0x14
 
 #define DL_MIFARE_MINI					0x20
 #define	DL_MIFARE_CLASSIC_1K			0x21
