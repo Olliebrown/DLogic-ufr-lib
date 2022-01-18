@@ -1,10 +1,10 @@
 /*
  * uFCoder.h
  *
- * library version: 5.0.58
+ * library version: 5.0.59
  *
  * Created on:  2009-01-14
- * Last edited: 2022-01-12
+ * Last edited: 2022-01-18
  *
  * Author: D-Logic
  */
@@ -85,6 +85,7 @@ typedef void * UFR_HANDLE;
 #define DL_NTAG_424_DNA                 0x12
 #define DL_NTAG_424_DNA_TT				0x13
 #define DL_NTAG_210U                    0x14
+#define DL_NTAG_213_TT                  0x15
 
 #define DL_MIFARE_MINI					0x20
 #define	DL_MIFARE_CLASSIC_1K			0x21
@@ -1116,6 +1117,7 @@ UFR_STATUS DL_API GetAntiCollisionStatus(VAR int8_t *lpcIsAntiCollEnabled, VAR i
 UFR_STATUS DL_API GetDlogicCardType(VAR uint8_t *lpucCardType);
 UFR_STATUS DL_API GetNfcT2TVersion(OUT uint8_t lpucVersionResponse[8]);
 UFR_STATUS DL_API GetCardSize(VAR uint32_t *lpulLinearSize, VAR uint32_t *lpulRawSize);
+UFR_STATUS DL_API ReadTTStatus(OUT uint8_t *tt_message, VAR uint8_t *tt_status);
 
 // uFCoder PRO MODE
 UFR_STATUS DL_API GetReaderProMode(VAR uint32_t *pReaderProMode, OUT uint32_t *pReaderProConfig);
@@ -1163,8 +1165,11 @@ UFR_STATUS DL_API write_ndef_record(uint8_t message_nr, IN uint8_t *tnf, IN uint
                                     IN uint8_t *id_length, IN uint8_t *payload, IN uint32_t *payload_length, VAR uint8_t *card_formated);
 UFR_STATUS DL_API write_ndef_record_mirroring(uint8_t message_nr, IN uint8_t *tnf, IN uint8_t *type_record, IN uint8_t *type_length,
                                               IN uint8_t *id, IN uint8_t *id_length, IN uint8_t *payload, IN uint32_t *payload_length,
+                                              VAR uint8_t *card_formated, int use_uid_ascii_mirror, int use_counter_ascii_mirror, uint32_t payload_mirroring_pos);
+UFR_STATUS DL_API write_ndef_record_mirroring_tt(uint8_t message_nr, IN uint8_t *tnf, IN uint8_t *type_record, IN uint8_t *type_length,
+                                              IN uint8_t *id, IN uint8_t *id_length, IN uint8_t *payload, IN uint32_t *payload_length,
                                               VAR uint8_t *card_formated, int use_uid_ascii_mirror, int use_counter_ascii_mirror,
-                                              uint32_t payload_mirroring_pos);
+											  int use_tt_message_mirror, uint32_t payload_mirroring_pos);
 UFR_STATUS DL_API get_ndef_record_count(VAR uint8_t *ndef_message_cnt, VAR uint8_t *ndef_record_cnt, OUT uint8_t *ndef_record_array,
                                         VAR uint8_t *empty_ndef_message_cnt);
 UFR_STATUS DL_API erase_last_ndef_record(uint8_t message_nr);
@@ -3759,6 +3764,7 @@ UFR_STATUS DL_API GetDlogicCardTypeM(UFR_HANDLE hndUFR, VAR uint8_t *lpucCardTyp
 UFR_STATUS DL_API GetNfcT2TVersionM(UFR_HANDLE hndUFR, OUT uint8_t lpucVersionResponse[8]);
 
 UFR_STATUS DL_API GetCardSizeM(UFR_HANDLE hndUFR, VAR uint32_t *lpulLinearSize, VAR uint32_t *lpulRawSize);
+UFR_STATUS DL_API ReadTTStatusM(UFR_HANDLE hndUFR, OUT uint8_t *tt_message, VAR uint8_t *tt_status);
 
 // uFCoder PRO MODE
 UFR_STATUS DL_API GetReaderProModeM(UFR_HANDLE hndUFR, VAR uint32_t *pReaderProMode, OUT uint32_t *pReaderProConfig);
@@ -3795,6 +3801,11 @@ UFR_STATUS DL_API write_ndef_record_mirroringM(UFR_HANDLE hndUFR, uint8_t messag
                                                uint8_t *type_length, IN uint8_t *id, uint8_t *id_length, IN uint8_t *payload,
                                                uint32_t *payload_length, VAR uint8_t *card_formated, int use_uid_ascii_mirror,
                                                int use_counter_ascii_mirror, uint32_t payload_mirroring_pos);
+
+UFR_STATUS DL_API write_ndef_record_mirroring_ttM(UFR_HANDLE hndUFR, uint8_t message_nr, uint8_t *tnf, IN uint8_t *type_record,
+                                               uint8_t *type_length, IN uint8_t *id, uint8_t *id_length, IN uint8_t *payload,
+                                               uint32_t *payload_length, VAR uint8_t *card_formated, int use_uid_ascii_mirror,
+                                               int use_counter_ascii_mirror, int use_tt_message_mirror, uint32_t payload_mirroring_pos);
 
 UFR_STATUS DL_API get_ndef_record_countM(UFR_HANDLE hndUFR, VAR uint8_t *ndef_message_cnt, VAR uint8_t *ndef_record_cnt,
                                          OUT uint8_t *ndef_record_array, VAR uint8_t *empty_ndef_message_cnt);
